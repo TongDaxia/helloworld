@@ -1,4 +1,15 @@
-HelloWorld!
+µçÄÔÕËºÅDearTongdaxia:
 
 TongDaxia
 ³£¼ûÃÜÂë
+
+centOS6
+root/123456
+192.168.145.128
+
+
+192.168.145.129:1521/orcl
+system
+orcl
+
+
