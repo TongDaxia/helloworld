@@ -1,11 +1,10 @@
 ---
+
 title: JVM调优
 date: 2019-05-22 11:04:56
 tags: [java,底层] 
 description: JVM是Java Virtual Machine（Java虚拟机）的缩写，JVM是一种用于计算设备的规范，它是一个虚构出来的计算机，是通过在实际的计算机上仿真模拟各种计算机功能来实现的。
 ---
-
-# JVM调优
 
 ​	Java语言的一个非常重要的特点就是与平台的无关性。而使用Java虚拟机是实现这一特点的关键。一般的高级语言如果要在不同的平台上运行，至少需要编译成不同的目标代码。而引入Java语言虚拟机后，Java语言在不同平台上运行时不需要重新编译。Java语言使用Java虚拟机屏蔽了与具体平台相关的信息，使得Java语言编译程序只需生成在Java虚拟机上运行的目标代码（字节码），就可以在多种平台上不加修改地运行。Java虚拟机在执行字节码时，把字节码解释成具体平台上的机器指令执行。这就是Java的能够“一次编译，到处运行”的原因。
 
@@ -105,19 +104,19 @@ Class NewObject {
 
 #### 标记-清除（Mark-Sweep）:
 
-![JVM Tuning 002](https://images.cnblogs.com/cnblogs_com/andy-zhou/806435/o_Jvm_Tuning002.png)
+![JVM Tuning 002](E:\tyg\study\blog\source\_posts\img\GC01.png)
 
 ​	此算法执行分两阶段。第一阶段从引用根节点开始标记所有被引用的对象，第二阶段遍历整个堆，把未标记的对象清除。此算法需要暂停整个应用，同时，会产生内存碎片。
 
 #### 复制（Copying）:
 
-![JVM Tuning 003](https://images.cnblogs.com/cnblogs_com/andy-zhou/806435/o_Jvm_Tuning003.png)
+![JVM Tuning 003](E:\tyg\study\blog\source\_posts\img\o_Jvm_Tuning003.png)
 
 ​	此算法把内存空间划为两个相等的区域，每次只使用其中一个区域。垃圾回收时，遍历当前使用区域，把正在使用中的对象复制到另外一个区域中。次算法每次只处理正在使用中的对象，因此复制成本比较小，同时复制过去以后还能进行相应的内存整理，不会出现“碎片”问题。当然，此算法的缺点也是很明显的，就是需要两倍内存空间。
 
 #### 标记-整理（Mark-Compact）:
 
-![JVM Tuning 004](https://images.cnblogs.com/cnblogs_com/andy-zhou/806435/o_Jvm_Tuning004.png)
+![JVM Tuning 004](E:\tyg\study\blog\source\_posts\img\o_Jvm_Tuning004.png)
 
 此算法结合了“标记-清除”和“复制”两个算法的优点。也是分两阶段，第一阶段从根节点开始标记所有被引用对象，第二阶段遍历整个堆，把清除未标记对象并且把存活对象“压缩”到堆的其中一块，按顺序排放。此算法避免了“标记-清除”的碎片问题，同时也避免了“复制”算法的空间问题。
 
@@ -149,7 +148,7 @@ Class NewObject {
 
 上面说到的“引用计数”法，通过统计控制生成对象和删除对象时的引用数来判断。垃圾回收程序收集计数为0的对象即可。但是这种方法无法解决循环引用。所以，后来实现的垃圾判断算法中，都是从程序运行的根节点出发，遍历整个对象引用，查找存活的对象。那么在这种方式的实现中，垃圾回收从哪儿开始的呢？即，从哪儿开始查找哪些对象是正在被当前系统使用的。上面分析的堆和栈的区别，其中栈是真正进行程序执行地方，所以要获取哪些对象正在被使用，则需要从Java栈开始。同时，一个栈是与一个线程对应的，因此，如果有多个线程的话，则必须对这些线程对应的所有的栈进行检查。
 
-![JVM Tuning 005](https://images.cnblogs.com/cnblogs_com/andy-zhou/806435/o_Jvm_Tuning005.png)
+![JVM Tuning 005](E:\tyg\study\blog\source\_posts\img\o_Jvm_Tuning005.png)
 
 同时，除了栈外，还有系统运行时的寄存器等，也是存储程序运行数据的。这样，以栈或寄存器中的引用为起点，我们可以找到堆中的对象，又从这些对象找到对堆中其他对象的引用，这种引用逐步扩展，最终以null引用或者基本类型结束，这样就形成了一颗以Java栈中引用所对应的对象为根节点的一颗对象树，如果栈中有多个引用，则最终会形成多颗对象树。在这些对象树上的对象，都是当前系统运行所需要的对象，不能被垃圾回收。而其他剩余对象，则可以视为无法被引用到的对象，可以被当做垃圾进行回收。
 
@@ -175,9 +174,13 @@ Class NewObject {
 
 试想，在不进行对象存活时间区分的情况下，每次垃圾回收都是对整个堆空间进行回收，花费时间相对会长，同时，因为每次回收都需要遍历所有存活对象，但实际上，对于生命周期长的对象而言，这种遍历是没有效果的，因为可能进行了很多次遍历，但是他们依旧存在。因此，分代垃圾回收采用分治的思想，进行代的划分，把不同生命周期的对象放在不同代上，不同代上采用最适合它的垃圾回收方式进行回收。
 
-## 如何分代![JVM Tuning 006](https://images.cnblogs.com/cnblogs_com/andy-zhou/806435/o_Jvm_Tuning006.png)
+## 如何分代
 
 如图所示：
+
+
+
+![JVM Tuning 006](E:\tyg\study\blog\source\_posts\img\o_Jvm_Tuning006.png)
 
 虚拟机中的共划分为三个代：年轻代（Young Generation）、年老点（Old Generation）和持久代（Permanent Generation）。其中持久代主要存放的是Java类的类信息，与垃圾收集要收集的Java对象关系不大。年轻代和年老代的划分是对垃圾收集影响比较大的。
 
@@ -214,21 +217,21 @@ Full GC
 
 ## 分代垃圾回收流程示意
 
-![JVM Tuning 007](https://images.cnblogs.com/cnblogs_com/andy-zhou/806435/o_Jvm_Tuning007.png)
+![JVM Tuning 007](E:\tyg\study\blog\source\_posts\img\o_Jvm_Tuning007.png)
 
-![JVM Tuning 008](https://images.cnblogs.com/cnblogs_com/andy-zhou/806435/o_Jvm_Tuning008.png)
+![JVM Tuning 008](E:\tyg\study\blog\source\_posts\img\o_Jvm_Tuning008.png)
 
-![JVM Tuning 009](https://images.cnblogs.com/cnblogs_com/andy-zhou/806435/o_Jvm_Tuning009.png)
+![JVM Tuning 009](E:\tyg\study\blog\source\_posts\img\o_Jvm_Tuning009.png)
 
-![JVM Tuning 010](https://images.cnblogs.com/cnblogs_com/andy-zhou/806435/o_Jvm_Tuning010.png)
+![JVM Tuning 010](E:\tyg\study\blog\source\_posts\img\o_Jvm_Tuning010.png)
 
 ## 选择合适的垃圾收集算法
 
-![JVM Tuning 011](https://images.cnblogs.com/cnblogs_com/andy-zhou/806435/o_Jvm_Tuning011.png)
+![JVM Tuning 011](E:\tyg\study\blog\source\_posts\img\o_Jvm_Tuning011.png)
 
 用单线程处理所有垃圾回收工作，因为无需多线程交互，所以效率比较高。但是，也无法使用多处理器的优势，所以此收集器适合单处理器机器。当然，此收集器也可以用在小数据量（100M左右）情况下的多处理器机器上。可以使用-XX:+UseSerialGC打开。
 
-![JVM Tuning 012](https://images.cnblogs.com/cnblogs_com/andy-zhou/806435/o_Jvm_Tuning012.png)
+![JVM Tuning 012](E:\tyg\study\blog\source\_posts\img\o_Jvm_Tuning012.png)
 
 对年轻代进行并行垃圾回收，因此可以减少垃圾回收时间。一般在多线程多处理器机器上使用。使用-XX:+UseParallelGC.打开。并行收集器在J2SE5.0第六6更新上引入，在Java SE6.0中进行了增强--可以对年老代进行并行收集。如果年老代不使用并发收集的话，默认是使用单线程进行垃圾回收，因此会制约扩展能力。使用-XX:+UseParallelOldGC打开。
 
@@ -244,7 +247,7 @@ Full GC
 
 可以保证大部分工作都并发进行（应用不停止），垃圾回收只暂停很少的时间，此收集器适合对响应时间要求比较高的中、大规模应用。使用-XX:+UseConcMarkSweepGC打开。
 
-![JVM Tuning 013](https://images.cnblogs.com/cnblogs_com/andy-zhou/806435/o_Jvm_Tuning013.png)
+![JVM Tuning 013](E:\tyg\study\blog\source\_posts\img\o_Jvm_Tuning013.png)
 
 并发收集器主要减少年老代的暂停时间，他在应用不停止的情况下使用独立的垃圾回收线程，跟踪可达对象。在每个年老代垃圾回收周期中，在收集初期并发收集器 会对整个应用进行简短的暂停，在收集中还会再暂停一次。第二次暂停会比第一次稍长，在此过程中多个线程同时进行垃圾回收工作。
 
@@ -378,7 +381,7 @@ java -Xmx3550m -Xms3550m -Xmn2g -Xss128k -XX:+UseConcMarkSweepGC -XX:CMSFullGCsB
 
 JVM提供了大量命令行参数，打印信息，供调试使用。主要有以下一些：
 
--XX:+PrintGC：输出形式：[GC 118250K->113543K(130112K), 0.0094143 secs] [Full GC 121376K->10414K(130112K), 0.0650971 secs]
+-XX:+PrintGC：输出形式：[GC 118250K->113543K(130112K), 0.0094143 secs][Full GC 121376K->10414K(130112K), 0.0650971 secs]
 
 -XX:+PrintGCDetails：输出形式：[GC [DefNew: 8614K->781K(9088K), 0.0123035 secs] 118250K->113543K(130112K), 0.0124633 secs] [GC [DefNew: 8614K->8614K(9088K), 0.0000665 secs][Tenured: 112761K->10414K(121024K), 0.0433488 secs] 121376K->10414K(130112K), 0.0436268 secs]
 
@@ -514,7 +517,9 @@ rw space 12288K, 46% used [0x2b3d0000, 0x2b972060, 0x2b972200, 0x2bfd0000)
 
 算法详解
 
-![JVM Tuning 014](https://images.cnblogs.com/cnblogs_com/andy-zhou/806435/o_Jvm_Tuning014.png)
+
+
+![JVM Tuning 014](E:\tyg\study\blog\source\_posts\img\o_Jvm_Tuning014.png)
 
 G1可谓博采众家之长，力求到达一种完美。他吸取了增量收集优点，把整个堆划分为一个一个等大小的区域（region）。内存的回收和划分都以region为单位；同时，他也吸取了CMS的特点，把这个垃圾回收过程分为几个阶段，分散一个垃圾回收过程；而且，G1也认同分代垃圾回收的思想，认为不同对象的生命周期不同，可以采取不同收集方式，因此，它也支持分代的垃圾回收。为了达到对回收时间的可预计性，G1在扫描了region以后，对其中的活跃对象的大小进行排序，首先会收集那些活跃对象小的region，以便快速回收空间（要复制的活跃对象少了），因为活跃对象小，里面可以认为多数都是垃圾，所以这种方式被称为Garbage First（G1）的垃圾回收算法，即：垃圾优先的回收。
 
@@ -566,7 +571,7 @@ VisualVM：JDK自带，功能强大，与JProfiler类似。推荐。
 
 上面这些调优工具都提供了强大的功能，但是总的来说一般分为以下几类功能
 
-![JVM Tuning 015](https://images.cnblogs.com/cnblogs_com/andy-zhou/806435/o_Jvm_Tuning015.png)
+![JVM Tuning 015](E:\tyg\study\blog\source\_posts\img\o_Jvm_Tuning015.png)
 
 
 
@@ -574,7 +579,7 @@ VisualVM：JDK自带，功能强大，与JProfiler类似。推荐。
 提供即时的垃圾回收功能
 垃圾监控（长时间监控回收情况）
 
-![JVM Tuning 016](https://images.cnblogs.com/cnblogs_com/andy-zhou/806435/o_Jvm_Tuning016.png)
+![JVM Tuning 016](E:\tyg\study\blog\source\_posts\img\o_Jvm_Tuning016.png)
 
 
 
@@ -582,7 +587,7 @@ VisualVM：JDK自带，功能强大，与JProfiler类似。推荐。
 查看堆内类、对象信息查看：数量、类型等
 ```
 
-![JVM Tuning 017](https://images.cnblogs.com/cnblogs_com/andy-zhou/806435/o_Jvm_Tuning017.png)
+![JVM Tuning 017](E:\tyg\study\blog\source\_posts\img\o_Jvm_Tuning017.png)
 
 ```
 对象引用情况查看
@@ -596,14 +601,14 @@ VisualVM：JDK自带，功能强大，与JProfiler类似。推荐。
 
 ## 线程监控
 
-![JVM Tuning 018](https://images.cnblogs.com/cnblogs_com/andy-zhou/806435/o_Jvm_Tuning018.png)
+![JVM Tuning 018](E:\tyg\study\blog\source\_posts\img\o_Jvm_Tuning018.png)
 
 ```
 线程信息监控：系统线程数量。
 线程状态监控：各个线程都处在什么样的状态下
 ```
 
-![JVM Tuning 019](https://images.cnblogs.com/cnblogs_com/andy-zhou/806435/o_Jvm_Tuning019.png)
+![JVM Tuning 019](E:\tyg\study\blog\source\_posts\img\o_Jvm_Tuning019.png)
 
 ```
 Dump线程详细信息：查看线程内部运行情况
@@ -612,7 +617,7 @@ Dump线程详细信息：查看线程内部运行情况
 
 热点分析
 
-![JVM Tuning 020](https://images.cnblogs.com/cnblogs_com/andy-zhou/806435/o_Jvm_Tuning020.png)
+![JVM Tuning 020](E:\tyg\study\blog\source\_posts\img\o_Jvm_Tuning020.png)
 
 CPU热点：检查系统哪些方法占用的大量CPU时间
 
@@ -641,7 +646,7 @@ CPU热点：检查系统哪些方法占用的大量CPU时间
 
 说明：
 
-![JVM Tuning 021](https://images.cnblogs.com/cnblogs_com/andy-zhou/806435/o_Jvm_Tuning021.png)
+![JVM Tuning 021](E:\tyg\study\blog\source\_posts\img\o_Jvm_Tuning021.png)
 
 这是最典型的内存泄漏方式，简单说就是所有堆空间都被无法回收的垃圾对象占满，虚拟机无法再在分配新空间。
 如上图所示，这是非常典型的内存泄漏的垃圾回收情况图。所有峰值部分都是一次垃圾回收点，所有谷底部分表示是一次垃圾回收后剩余的内存。连接所有谷底的点，可以发现一条由底到高的线，这说明，随时间的推移，系统的堆空间被不断占满，最终会占满整个堆空间。因此可以初步认为系统内部可能有内存泄漏。（上面的图仅供示例，在实际情况下收集数据的时间需要更长，比如几个小时或者几天）

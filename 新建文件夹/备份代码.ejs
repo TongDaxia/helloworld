@@ -1,0 +1,41 @@
+<div class="bdsharebuttonbox">
+<a href="#" class="bds_more" data-cmd="more"></a>
+<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+<a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+<a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+</div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+ 
+ 
+<% if (!index && post.toc){ %>
+	<div id="toc" class="toc-article">
+		<strong class="toc-title">文章目录</strong>
+		<%- toc(post.content, {list_number: false}) %>
+	</div>
+<% } %>
+
+/*toc*/
+.toc-article
+	background #eee
+	border 1px solid #bbb
+	border-radius 10px
+	margin 1.5em 0 0.3em 1.5em
+	padding 1.2em 1em 0 1em
+	max-width 28%
+
+.toc-title
+	font-size 120%
+
+#toc
+	line-height 1em
+	font-size 0.9em
+	float right
+.toc
+	padding 0
+	margin 1em
+	line-height 1.8em
+	list-style-type none
+
+.toc-child
+	margin-left 1em

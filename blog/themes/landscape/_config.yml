@@ -5,7 +5,7 @@ menu:
 rss: /atom.xml
 
 # Content
-excerpt_link: Read More
+excerpt_link: 阅读全文
 fancybox: true
 
 # Sidebar
@@ -35,3 +35,8 @@ twitter:
 google_plus:
 fb_admins:
 fb_app_id:
+
+archive_generator:
+  per_page: 20  //为0时表示不分页全展示
+  yearly: true  //按年生成归档
+  monthly: true //按月生成归档

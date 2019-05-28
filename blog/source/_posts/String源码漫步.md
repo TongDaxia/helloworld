@@ -5,8 +5,6 @@ tag：[java,源码]
 
 ---
 
-#  String源码漫步
-
 
 
 ```
@@ -14,9 +12,7 @@ public final class String
     implements java.io.Serializable, Comparable<String>, CharSequence {}
 ```
 
-
-
-
+<!--more-->
 
 ## 属性
 
