@@ -1,6 +1,6 @@
 ---
 title: Elastic-5分布式文档存储
-date: 2019-05-31 14:26:00
+date: 2019-05-31  
 tags: [java,分布式,Elastic]
 ---
 
@@ -13,6 +13,8 @@ shard = hash(routing) % number_of_primary_shards
 `routing` 通过 hash 函数生成一个数字，然后这个数字再除以 `number_of_primary_shards` （主分片的数量）后得到 **余数** 。
 
 这就解释了为什么我们要在创建索引的时候就确定好主分片的数量 并且永远不会改变这个数量：因为如果数量变化了，那么所有之前路由的值都会无效，文档也再也找不到了。
+
+<!--more-->
 
 > 你可能觉得由于 Elasticsearch 主分片数量是固定的会使索引难以进行扩容。实际上当你需要时有很多技巧可以轻松实现扩容。我们将会在[*扩容设计*](https://www.elastic.co/guide/cn/elasticsearch/guide/current/scale.html)一章中提到更多有关水平扩展的内容。
 

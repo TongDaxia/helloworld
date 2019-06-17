@@ -1,6 +1,8 @@
-
-
-
+---
+title: Elastic 启动出现bug
+date: 2019-05-23  
+tags: [java,Elastic,分布式] 
+---
 
 
 
@@ -13,40 +15,6 @@
 解决办法：
 
 删除 data 文件夹即可。
-
-
-
-做复杂查询的时候
-
-查询范围不是自己想要的
-
-```
-GET /megacorp/employee/_search
-{
-    "query" : {
-        "bool": {
-            "must": {
-                "match" : {
-                    "last_name" : "smith" 
-                }
-            },
-            "filter": {
-                "range" : {
-                    "age" : { "gt" : 30 } 
-                }
-            }
-        }
-    }
-}
-```
-
-想要查30岁以上的员工，实际上所有数据都返回了！
-
-why?
-
-解决：使用其他链接工具：kibana试试！
-
-
 
 
 

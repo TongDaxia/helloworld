@@ -1,3 +1,9 @@
+---
+title: Tomcat日志的理解
+date: 2019-06-11 
+tags: [java,Tomcat,日志] 
+---
+
 ##### 几种log
 
 Tomcat默认使用JULI日志系统
@@ -7,14 +13,15 @@ Tomcat默认使用JULI日志系统
 Server、Tomcat Localhost Log 和Tomcat Catalina Log:
 
 1. catalina.out 是tomcat的标准输出(stdout)和标准出错(stderr).是在tomcat的启动脚本里指定的；一般包括控制台输出。
-
 2. Localhost log 对应 CATALINA_BASE指向目录的localhost.{yyyy-MM-dd}.log 文件。记录的是应用初始化(listener, filter, servlet)未处理的异常最后被tomcat捕获而输出的日志。
-
 3. Catalina log 对应 CATALINA_BASE指向目录的localhost.{yyyy-MM-dd}.log 文件。 是tomcat自己运行的一些日志。应用向console输出的日志不会输出到catalina.{yyyy-MM-dd}.log。
-
 4. Tomcat 默认manager应用日志，文件名manager.日期.log，如果配置了其他的项目应用，如下配置了Demo ，会出现demo.{yyyy-MM-dd}.log日志。
 
-![1560219576716](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1560219576716.png)
+<!--more-->
+
+
+
+![1560219576716](E:\tyg\study\blog\source\_posts\img\1560220401868.png)
 
 ##### 日志的级别
 
@@ -102,7 +109,7 @@ org.apache.catalina.core.ContainerBase.[Catalina].[localhost].[/host-manager].ha
 
 在idea中启动Tomcat可根据控制台输出寻找对应地址。
 
-![1560220291955](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1560220291955.png)比如我的会默认指向：
+![1560220291955](E:\tyg\study\blog\source\_posts\img\1560220291955.png)比如我的会默认指向：
 
 ```
 C:\Users\Administrator\.IntelliJIdea2017.3（IDEA版本）\system\tomcat\项目名\logs

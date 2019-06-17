@@ -8,6 +8,8 @@ tags:  [java,底层]
 
 Java代码是要运行在虚拟机上的，而虚拟机在执行Java程序的过程中会把所管理的内存划分为若干个不同的数据区域，这些区域都有各自的用途。其中有些区域随着虚拟机进程的启动而存在，而有些区域则依赖用户线程的启动和结束而建立和销毁。
 
+<!--more-->
+
 ![JVM运行时内存结构](E:\tyg\study\blog\source\_posts\img\JVM运行时内存结构.png)
 
 除了以上介绍的JVM运行时内存外，还有一块内存区域可供使用，那就是直接内存。Java虚拟机规范并没有定义这块内存区域，所以他并不由JVM管理，是利用本地方法库直接在堆外申请的内存区域。
@@ -29,10 +31,6 @@ HotSpot虚拟机中，设计了一个OOP-Klass Model。OOP（Ordinary Object Poi
 ![java中的对象存储模型](E:\tyg\study\blog\source\_posts\img\java中的对象存储模型.jpeg)
 
 这就是一个简单的Java对象的OOP-Klass模型，即Java对象模型。
-
-
-
-
 
 
 
