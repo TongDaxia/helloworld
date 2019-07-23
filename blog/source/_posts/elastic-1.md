@@ -45,7 +45,11 @@ E:\tyg\elastic\movielens\logstash.conf
 
 logstash -f E:\tyg\elastic\movielens\logstash.conf   ##不行，失败了
 
-logstash.bat -f  logstash.conf   //失败了
+logstash.bat -f  logstash.conf  
+
+
+
+
 
 logstash.bat -e 'input { stdin { } } output { stdout {} }'
 logstash -e 'input { stdin { } } output { stdout {} }'
@@ -82,6 +86,30 @@ GET /_cat/indices/kibana*?pri&v&h=health,index,pri,rep,docs.count,mt
 GET /_cat/indices?v&h=i,tm&s=tm:desc
 
 ```
+
+
+
+Docker 安装docker
+
+
+
+```
+docker images
+
+docker search elastic
+
+
+
+
+```
+
+
+
+
+
+
+
+
 
 
 
