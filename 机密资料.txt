@@ -1,0 +1,80 @@
+﻿
+192.168.187.13
+
+Alt+P
+put "E:\ttt\apache-tomcat-9.0.21.tar.gz"
+
+tar -zxvf  apache-tomcat-9.0.tar.gz
+其中zxvf含义分别如下
+z: 　　gzip  　　　　　　　　    压缩格式
+x: 　　extract　　　　　　　　  解压
+v:　　 verbose　　　　　　　　详细信息
+f: 　　file(file=archieve)　　　　文件
+
+删除文件夹实例：
+rm -rf /var/log/httpd/access
+将会删除/var/log/httpd/access目录以及其下所有文件、文件夹
+
+查看所有进程 ps -ef
+查找指定进程weblogic  ps -ef  |grep tomcat
+杀掉进程    kill -9 进程号
+启动进程    ./start  startWebLogic.sh
+
+防火墙设置需要重启系统）
+开启： chkconfig iptables on 
+关闭： chkconfig iptables off 
+（立即生效，重启后失效）
+启动：service iptables start 
+关闭：service iptables stop iptables
+
+以下命令在centOS7并不能使用：
+ service iptables stop --停止 service iptables start --启动 
+ /sbin/iptables -I INPUT -p tcp --dport 8080 -j ACCEPT  #开启8000端口
+ /etc/rc.d/init.d/iptables save #保存配置 
+/etc/rc.d/init.d/iptables restart #重启服务 查看端口是否已经开放 
+/etc/init.d/iptables status
+
+centOS7使用了新的
+查看防火墙的状态；
+firewall-cmd --state 
+systemctl start firewalld.service  //开启防火墙
+firewall-cmd --zone=public --add-port=8080/tcp --permanent  //开启8080
+	--zone=public：表示作用域为公共的；
+	--add-port=8080/tcp：添加tcp协议的端口8080；
+	--permanent：永久生效，如果没有此参数，则只能维持当前服务生命周期内，重新启动后失效；
+systemctl restart firewalld.service 
+firewall-cmd --reload
+
+http://192.168.187.13:8080/
+
+查询有哪些端口是开启的:  	firewall-cmd --list-port
+查询端口号80 是否开启   	firewall-cmd --query-port=8080/tcp
+开启端口			firewall-cmd --zone=public --add-port=80/tcp --permanent
+
+rpm -qa|grep wget
+yum install -y wget
+
+
+java  下载地址
+wget https://download.oracle.com/otn-pub/java/jdk/12.0.1+12/69cfe15208a647278a19ef0990eea691/jdk-12.0.1_linux-x64_bin.tar.gz
+
+手动下载上传
+mkdir /usr/local/java/
+tar -zxvf jdk-8u171-linux-x64.tar.gz -C /usr/local/java/
+
+
+vi /etc/profile
+
+在末尾添加
+export JAVA_HOME=/usr/local/java/jdk-12.0.1
+export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
+export PATH=${JAVA_HOME}/bin:$PATH
+
+source /etc/profile
+
+ln -s /usr/local/java/jdk-12.0.1/bin/java /usr/bin/java
+java -version
+
+/root/apache-tomcat-9.0.21/bin/catalina.sh:行517: /usr/local/java/jdk-12.0.1/jre/bin/java: 没有那个文件或目录
+
+
