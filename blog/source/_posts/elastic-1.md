@@ -1,3 +1,13 @@
+---
+title: Elastic-1简介和安装
+date: 2019-04-1 
+tags: [java,分布式,Elastic]
+---
+
+
+
+
+
 安装插件：
 
 ```
