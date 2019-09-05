@@ -1,6 +1,6 @@
 ---
-title: 分布式锁的学习
-date: 2019-05-31
+title: webMagic超时错误
+date: 2019-05-13
 tags: [java,爬虫，bug] 
 ---
 

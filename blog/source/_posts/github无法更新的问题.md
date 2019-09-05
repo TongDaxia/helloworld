@@ -1,4 +1,12 @@
-使用github 无法正常更新：
+---
+title: github无法更新的问题
+date: 2019-05-27 
+tags: [git]
+---
+
+使用github 无法正常更新
+
+<!--more-->
 
 更新选项：
 

@@ -1,6 +1,6 @@
 ---
 title: SpringCloud+mybatis+webmagic Mapper注入报错
-date: 2019-06-17 1
+date: 2019-06-17 
 tags: [java,Spring,Bug]
 ---
 
