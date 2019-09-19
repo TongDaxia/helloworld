@@ -2,3 +2,5 @@ hexo g		hexo generate   	生成静态文件
 hexo d		hexo deploy	用于部署网站
 hexo s		hexo server	启动本地服务器
 hexo clean			清理缓存
+
+npm install hexo-server --save  适时更新
