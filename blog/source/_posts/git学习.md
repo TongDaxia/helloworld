@@ -6,28 +6,29 @@ tags: [git]
 
 
 
+在某一个工作空间设置全局的用户名
+
 ```
 $ git config --global user.name "Your Name"
 $ git config --global user.email "email@example.com"
-
 ```
 
-
+常用命令-创建版本库和初始化
 
 ```
-$ mkdir learngit
-$ cd learngit
+$ mkdir bolg
+$ cd bolg
 $ pwd
 $ git init
 ```
 
-
+添加文件
 
 ```
 git add readme.txt
 ```
 
-
+查看状态和分支情况等
 
 ```
  git status
@@ -44,8 +45,6 @@ git log
 git reset --hard HEAD^
 git reset --hard 1094a
 git reflog  #显示每一次的提交
-
-
 ```
 
 
@@ -151,8 +150,6 @@ Git鼓励大量使用分支：
 
 删除分支：git branch -d <name>
 ```
-
-
 
 
 
@@ -298,7 +295,7 @@ cat .git/config
 
 
 
-
+参考：  [史上最浅显易懂的Git教程!](https://www.liaoxuefeng.com/wiki/896043488029600)
 
 
 
