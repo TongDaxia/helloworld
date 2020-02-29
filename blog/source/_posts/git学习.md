@@ -117,7 +117,7 @@ git log --graph
 
 
 
-分支管理策略
+分支的管理策略
 
 ```
 创建  git checkout -b dev
