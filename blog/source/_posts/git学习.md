@@ -6,7 +6,7 @@ tags: [git]
 
 
 
-在某一个工作空间设置全局的用户名
+### 在某一个工作空间设置全局的用户名
 
 ```
 $ git config --global user.name "Your Name"
@@ -28,7 +28,7 @@ $ git init
 git add readme.txt
 ```
 
-查看状态和分支情况等
+## 查看状态和分支情况等
 
 ```
  git status
@@ -78,7 +78,7 @@ $ git clone git@github.com:michaelliao/gitskills.git
 
 
 
-分支管理
+## 分支管理
 
 ```
 首先， 我们创建dev分支， 然后切换到dev分支：
