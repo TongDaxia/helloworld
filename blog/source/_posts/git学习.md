@@ -88,8 +88,10 @@ $ git branch dev
 $ git checkout dev
 然后， 用git branch命令查看当前分支：
 $ git branch
-
+看远程分支
+git branch -r
 提交修改过后
+git push origin  dev
 
 dev分支的工作完成， 我们就可以切换回master分支（文件看上去恢复了）：
 $ git checkout master
@@ -153,7 +155,7 @@ Git鼓励大量使用分支：
 
 
 
-bug分支
+bug分支 stash
 
 ```
 当前：
